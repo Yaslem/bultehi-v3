@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@font-face {
+  font-family: Readex;
+  src: url('/fonts/ReadexProExtraLight.ttf');
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: Readex;
+  src: url("/fonts/ReadexPro-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Readex;
+  src: url("/fonts/ReadexProRegular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Readex;
+  src: url("/fonts/ReadexProMedium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Readex;
+  src: url("/fonts/ReadexPro-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Readex;
+  src: url("/fonts/ReadexPro-Bold.ttf");
+  font-weight: 700;
+}
+
+body {
+  direction: rtl;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Readex, sans-serif;
+}
+
+canvas {
+  width: 400px !important;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+
+}
+
+::-webkit-scrollbar-track {
+  border: 7px solid #27272A;
+  box-shadow: inset 0 0 2.5px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #000, #888);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tox-statusbar__branding {
+  display: none !important;
+}
+
+.tox-tinymce {
+  border-width: 0px !important;
+}
+
+ul, ol {
+  list-style: disc;
+}
