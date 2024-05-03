@@ -22,7 +22,7 @@ export default function ResultStudent(){
     return (
         <section className={"fixed z-50 w-full h-full flex top-0 left-0"}>
             <div
-                className={"w-full md:min-w-[400px] transition-all md:border-r-2 md:border-black/5 flex flex-col gap-4 h-screen overflow-y-auto p-4 bg-white md:ml-auto"}>
+                className={"w-full md:max-w-[400px] transition-all md:border-r-2 md:border-black/5 flex flex-col gap-4 h-screen overflow-y-auto p-4 bg-white md:ml-auto"}>
                 <HeaderSection
                     onClick={() => dispatch(resultActions.setOpen(false))}
                     title={"نتيجة الطالب"}/>
