@@ -35,9 +35,9 @@ export default function Header ({SITE_TITLE, user}) {
                    <NavData title={"بكالوريا"} url={"high"} />
                </ul>
             </nav>
-             <div className={"flex gap-4 items-center"}>
-                <HeaderAuth user={user}/>
-            </div>
+            {/* <div className={"flex gap-4 items-center"}>*/}
+            {/*    <HeaderAuth user={user}/>*/}
+            {/*</div>*/}
         </section>
     )
 }
