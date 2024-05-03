@@ -30,9 +30,9 @@ export default function Header ({SITE_TITLE, user}) {
 
             <nav>
                 <ul className={"flex flex-wrap gap-x-4 transition items-center list-none"}>
-                    <NavData title={"بكالوريا"} url={"elementary"} />
+                    <NavData title={"كنكور"} url={"elementary"} />
                     <NavData title={"ابريفه"} url={"middle"} />
-                   <NavData title={"كنكور"} url={"high"} />
+                   <NavData title={"بكالوريا"} url={"high"} />
                </ul>
             </nav>
              <div className={"flex gap-4 items-center"}>

@@ -156,13 +156,7 @@ export function TopStudent({type = null, result, index}) {
                                     <MdNumbers className={"text-lg"}/>
                                     <span>الرقم</span>
                                 </div>
-                                <Link to={`/${getUrlForTypeResults(result.typeResult.slug)}/results/${generateIdFromSlug({
-                                    slug: result.result.title,
-                                    id: result.result.id
-                                })}/number/${generateIdFromSlug({
-                                    slug: result.student.name,
-                                    id: result.student.number
-                                })}`} className={"text-indigo-700 font-bold"}>{result.student.number}</Link>
+                                <p className={"text-slate-700 font-bold"}>{result.student.number}</p>
                             </>
                     }
                 </div>
@@ -898,8 +892,7 @@ export function ViewResultStudent({result}) {
                 <div className={"flex flex-col px-2 gap-1"}>
                     <FaGraduationCap className={"text-4xl w-full text-center text-indigo-500"}/>
                     <span
-                        className={"text-sm w-full text-center font-semibold text-indigo-500"}>#{result.student?.number} - {result.year?.name}{result.session && -
-                        <span className={"text-yellow-700"}>{result.session?.name}</span>}</span>
+                        className={"text-sm w-full text-center font-semibold text-indigo-500"}>#{result.student?.number} - {result.year?.name}{result.session ? <span className={"text-yellow-700"}> - {result.session?.name}</span> : null}</span>
                     <h1 className={"text-xl w-full font-bold text-indigo-600 text-center"}>{result.student?.name}</h1>
                 </div>
                 <div className={"flex items-center justify-center gap-3"}>
@@ -946,16 +939,13 @@ export function ViewResultStudent({result}) {
                                 }} className={"text-1xl cursor-pointer"}/>
                         }
                     </div>
-                    <Link to={generateSlug({
-                        slug: getValueForStudentResult({category: result.school, target: "name"}),
-                        id: getValueForStudentResult({category: result.school, target: "id"})
-                    })} className={classNames({
+                    <p className={classNames({
                         "text-xs text-indigo-700": true,
                         "blur-sm": ids.includes(`${getValueForStudentResult({
                             category: result.school,
                             target: "id"
                         })}_${getValueForStudentResult({category: result.school, target: "name"})}`)
-                    })}>{getValueForStudentResult({category: result.school, target: "name"})}</Link>
+                    })}>{getValueForStudentResult({category: result.school, target: "name"})}</p>
                 </div>
                 <div className={"flex flex-col gap-1"}>
                     <div className={"flex items-center gap-2"}>
@@ -989,14 +979,13 @@ export function ViewResultStudent({result}) {
                                 }} className={"text-1xl cursor-pointer"}/>
                         }
                     </div>
-                    <Link to={"/" + getValueForStudentResult({category: result.center, target: "id"})}
-                          className={classNames({
+                    <p className={classNames({
                               "text-xs text-indigo-700": true,
                               "blur-sm": ids.includes(`${getValueForStudentResult({
                                   category: result.center,
                                   target: "id"
                               })}_${getValueForStudentResult({category: result.center, target: "name"})}`)
-                          })}>{getValueForStudentResult({category: result.center, target: "name"})}</Link>
+                          })}>{getValueForStudentResult({category: result.center, target: "name"})}</p>
                 </div>
             </div>
             <hr/>
@@ -1022,14 +1011,10 @@ export function ViewResultStudent({result}) {
                         }
 
                     </div>
-                    <Link to={`/${getUrlForTypeResults(result.slug)}/results/${generateSlug({
-                        slug: result.result.title,
-                        id: result.result.id
-                    })}//${generateSlug({slug: result.state.name, id: result.state.id})}`}
-                          className={classNames({
+                    <p className={classNames({
                               "text-xs text-indigo-700": true,
                               "blur-sm": ids.includes(result.state.name)
-                          })}>{result.state.name}</Link>
+                          })}>{result.state.name}</p>
                 </div>
                 <div className={"flex flex-col gap-1"}>
                     <div className={"flex items-center gap-2"}>
@@ -1057,14 +1042,13 @@ export function ViewResultStudent({result}) {
                                 }} className={"text-1xl cursor-pointer"}/>
                         }
                     </div>
-                    <Link to={"/" + getValueForStudentResult({category: result.county, target: "id"})}
-                          className={classNames({
+                    <p className={classNames({
                               "text-xs text-indigo-700": true,
                               "blur-sm": ids.includes(getValueForStudentResult({
                                   category: result.county,
                                   target: "name"
                               }))
-                          })}>{getValueForStudentResult({category: result.county, target: "name"})}</Link>
+                          })}>{getValueForStudentResult({category: result.county, target: "name"})}</p>
                 </div>
             </div>
             {
@@ -1138,10 +1122,10 @@ export function ViewResultStudent({result}) {
                                             }} className={"text-1xl cursor-pointer"}/>
                                     }
                                 </div>
-                                <Link to={"/" + result.type.id} className={classNames({
+                                <p className={classNames({
                                     "text-xs text-indigo-700": true,
                                     "blur-sm": ids.includes(result.type.nameAr)
-                                })}>{result.type.nameAr}</Link>
+                                })}>{result.type.nameAr}</p>
                             </>
                             : <>
                                 <div className={"flex items-center gap-2"}>
@@ -1160,10 +1144,10 @@ export function ViewResultStudent({result}) {
                                             }} className={"text-1xl cursor-pointer"}/>
                                     }
                                 </div>
-                                <Link to={"/" + result.typeResult.id} className={classNames({
+                                <p className={classNames({
                                     "text-xs text-indigo-700": true,
                                     "blur-sm": ids.includes(result.typeResult.name)
-                                })}>{result.typeResult.name}</Link>
+                                })}>{result.typeResult.name}</p>
                             </>
                     }
                 </div>
@@ -1185,7 +1169,7 @@ export function ViewResultStudent({result}) {
                         }
                     </div>
                     <p className={classNames({
-                        "text-xs": true,
+                        "text-xs font-medium": true,
                         "blur-sm": ids.includes(result.degree)
                     })}>{result.degree}</p>
                 </div>
