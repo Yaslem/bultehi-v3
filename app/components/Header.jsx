@@ -12,7 +12,7 @@ export default function Header ({SITE_TITLE, user}) {
 
     return (
         <section
-            className={"flex bg-white border-b justify-between gap-4 py-2 px-4 items-center"}>
+            className={"flex bg-white border-b justify-between gap-4 p-4 items-center"}>
             <div className={"flex items-center gap-2"}>
                 {
                     pathname.startsWith("/dash") && user

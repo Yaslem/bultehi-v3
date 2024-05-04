@@ -6,6 +6,8 @@ import {FaUserGraduate, FaUsers} from "react-icons/fa";
 import {IoSettingsSharp} from "react-icons/io5";
 import classNames from 'classnames';
 import {useSelector} from "react-redux";
+import {IoIosNotifications} from "react-icons/io";
+import {AiFillGold} from "react-icons/ai";
 
 export default function Sidebar(){
     const pathname = useLocation().pathname
@@ -21,20 +23,20 @@ export default function Sidebar(){
         },
         {
             title: "النتائج",
-            icon: <GoHomeFill className={"text-2xl"} />,
+            icon: <AiFillGold className={"text-2xl"} />,
             href: "/dash/results",
             isActive: function () {
                 return  pathname.includes(this.href)
             }
         },
-        // {
-        //     title: "نتائجي",
-        //     icon: <BsPostcardHeartFill className={"text-2xl"} />,
-        //     href: "/dash/my-results",
-        //     isActive: function () {
-        //         return  pathname.includes(this.href)
-        //     }
-        // },
+        {
+            title: "الإشعارات",
+            icon: <IoIosNotifications className={"text-2xl"} />,
+            href: "/dash/notifications",
+            isActive: function () {
+                return  pathname.includes(this.href)
+            }
+        },
         // {
         //     title: "الرسائل",
         //     icon: <FaUsers className={"text-2xl"} />,

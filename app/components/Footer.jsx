@@ -36,7 +36,6 @@ export default function Footer(){
                 {/*    <button className={"flex items-center justify-center p-2 bg-indigo-700 hover:bg-indigo-600 text-white font-medium rounded-lg text-xs"}>اشتراك</button>*/}
                 {/*</form>*/}
             </section>
-            <hr/>
             <section className={"flex items-center justify-between pb-4"}>
                 <p className={"text-gray-700 font-medium text-sm"}>بلتيهي، جميع الحقوق محفوظة 1445 هـ</p>
                 <div className={"flex items-center gap-4"}>

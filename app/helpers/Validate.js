@@ -31,6 +31,16 @@ export default class Validate {
             invalid_type_error: "الدورة غير صالحة.",
         }).optional(),
     });
+    static createNotification = z.object({
+        title: z.string({
+            required_error: "العنوان مطلوب.",
+            invalid_type_error: "العنوان غير صالح.",
+        }).min(2, { message: "العنوان يجب أن يكون أطول من حرفين" }),
+        body: z.string({
+            required_error: "المحتوى مطلوب.",
+            invalid_type_error: "المحتوى غير صالح.",
+        }),
+    });
     static updateResult = z.object({
         title: z.string({
             required_error: "العنوان مطلوب.",

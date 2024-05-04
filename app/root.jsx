@@ -15,11 +15,12 @@ import Header from "./components/Header";
 import HeaderTop from "./components/HeaderTop";
 import Footer from "./components/Footer";
 import Global from "./components/Global";
-import {globalResponse} from "./helpers/SendResponse.server";
+import Notification from "./controllers/Notification.server.js"
 import {getUserAuthenticated, logOut} from "./services/auth.server";
 import middleware from "./services/middleware.server";
 import Notify from "./components/Notify";
 import {Progressbar} from "./components/Progressbar.jsx";
+import NotificationCard from "./components/NotificationCard.jsx";
 export const links = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "stylesheet", href: stylesheet },
@@ -27,7 +28,12 @@ export const links = () => [
 
 export const loader = async ({request}) => {
   await middleware(request)
-  return json(globalResponse({user: await getUserAuthenticated(request)}));
+  return json({
+    notifications: await Notification.getGlobalNotifications(),
+    user: await getUserAuthenticated(request),
+    SITE_TITLE: process.env.SITE_TITLE,
+    SITE_DESCRIPTION: process.env.SITE_DESCRIPTION
+  });
 };
 
 export const action = async ({request}) => {
@@ -53,7 +59,7 @@ export const meta = ({data}) => {
 
 
 export default function App() {
-  const {SITE_TITLE, user} = useLoaderData();
+  const {SITE_TITLE, user, notifications} = useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -67,9 +73,13 @@ export default function App() {
         <div className={"bg-white"}>
           <HeaderTop/>
           <Header user={user} SITE_TITLE={SITE_TITLE}/>
-          {/*<DropdownMenuDemo />*/}
         </div>
         <main className={"flex h-full flex-col"}>
+          {
+            notifications.status !== "error"
+                ? <NotificationCard notifications={notifications.data} />
+                : null
+          }
           <Notify />
           <section className={"flex-grow bg-stone-50"}>
             <Outlet/>
