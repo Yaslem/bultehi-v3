@@ -1,0 +1,282 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  phone         String?
+  state         String?
+  role          Role      @default(User)
+  categories  Category[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("users")
+}
+
+model VerificationToken {
+  id      String      @id @default(uuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String      @id @default(uuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+
+model Category {
+  id                     String          @id @default(uuid())
+  name                   String
+  slug                   String?
+  description            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  deletedAt              DateTime?
+  type                   CategoryType @default(ARTICLE)
+  userId                 String
+  user                   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("categories")
+}
+
+enum CategoryType {
+  ARTICLE
+  BOOK
+  COLLEGE
+  SPECIALIZATION
+  PHASE
+}
+
+enum Role {
+  User
+  TEACHER
+  PROFESSOR
+  ADMIN
+  STUDENT
+}
+
+model Student {
+  id        String             @id @default(uuid())
+  idNumber  Int?
+  number    Int
+  ref       String          @unique
+  name      String?
+  birth     DateTime?
+  resultId  String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+  result    Result?         @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@map("students")
+}
+
+model ResultStudent {
+  id               String         @id @default(uuid())
+  ref              String      @unique
+  degree           Decimal?
+  decision         String?
+  centerId         String?
+  sessionId        String?
+  schoolId         String?
+  // unknownId        String?
+  stateId          String?
+  countyId         String?
+  yearId           String?
+  rankingInCountry Int?
+  rankingInState   Int?
+  rankingInCounty  Int?
+  rankingInSchool  Int?
+  rankingInCenter  Int?
+  typeId           String?
+  resultId         String?
+  studentId        String?
+  typeResultId     String?
+  student          Student?    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  result           Result?     @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  center           Center?     @relation(fields: [centerId], references: [id], onDelete: SetNull)
+  school           School?     @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  // unknown          Unknown?    @relation(fields: [unknownId], references: [id], onDelete: SetNull)
+  state            State?      @relation(fields: [stateId], references: [id], onDelete: SetNull)
+  county           County?     @relation(fields: [countyId], references: [id], onDelete: SetNull)
+  year             Year?       @relation(fields: [yearId], references: [id], onDelete: SetNull)
+  type             BacType?    @relation(fields: [typeId], references: [id], onDelete: SetNull)
+  session          Session?    @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  typeResult       ReslutType? @relation(fields: [typeResultId], references: [id], onDelete: SetNull)
+}
+
+model Exception {
+  id        String      @id @default(uuid())
+  name      String
+  value     String
+  degree    Decimal
+  ref       String
+  applied   Boolean  @default(false)
+  yearId    String      @unique
+  typeId    String      @unique
+  resultId  String      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  year   Year       @relation(fields: [yearId], references: [id])
+  type   ReslutType @relation(fields: [typeId], references: [id])
+  result Result     @relation(fields: [resultId], references: [id], onDelete: Cascade)
+}
+
+model Year {
+  id          String             @id @default(uuid())
+  name        String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+  results     ResultStudent[]
+  result      Result[]
+  setDecision Exception?
+
+  @@map("years")
+}
+
+model BacType {
+  id        String       @id @default(uuid())
+  nameAr    String?
+  nameFr    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  results ResultStudent[]
+}
+
+model ReslutType {
+  id          String             @id @default(uuid())
+  name        String
+  slug        Int             @default(1)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+  result      Result[]
+  students    ResultStudent[]
+  setDecision Exception?
+
+  @@map("reslut_types")
+}
+
+model State {
+  id        String             @id @default(uuid())
+  name      String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+
+  @@map("states")
+}
+
+model County {
+  id        String             @id @default(uuid())
+  name      String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+
+  @@map("counties")
+}
+
+model Session {
+  id        String             @id @default(uuid())
+  name      String
+  slug      Int             @default(1)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+  result    Result[]
+
+  @@map("sessions")
+}
+
+model School {
+  id        String             @id @default(uuid())
+  name      String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+
+  @@map("schools")
+}
+
+model Unknown {
+  id        String       @id @default(uuid())
+  nameAr    String?
+  nameFr    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  // results   ResultStudent[]
+}
+
+model Center {
+  id        String             @id @default(uuid())
+  name      String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  results   ResultStudent[]
+
+  @@map("centers")
+}
+
+model Result {
+  id          String             @id @default(uuid())
+  title       String
+  file        String
+  isPublished Boolean         @default(false)
+  isUploaded  Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+  yearId      String?
+  typeId      String?
+  sessionId   String?
+  results     ResultStudent[]
+  students    Student[]
+  year        Year?           @relation(fields: [yearId], references: [id], onDelete: SetNull)
+  session     Session?        @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  type        ReslutType?     @relation(fields: [typeId], references: [id], onDelete: SetNull)
+  setDecision Exception?
+}
+
+model Notification {
+  id String @id @default(uuid())
+  title String
+  body String @db.MediumText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isPublished Boolean @default(false)
+}
