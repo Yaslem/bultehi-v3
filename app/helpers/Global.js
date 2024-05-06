@@ -352,12 +352,11 @@ export function getUnique(values) {
 }
 
 export function generateIdFromParams(param) {
-    return param.toString().split("-").pop()
+    return param.toString().split("->").pop()
 }
 export function generateSlug({slug, id}) {
     const pathName = useLocation().pathname
-    const parseSlug = slug?.toString().replaceAll("-", "").replaceAll("  ", "-").replaceAll(" ", "-")
-    return pathName + `/${parseSlug}-${id}`
+    return pathName + `/${slug}->${id}`
 }
 export function generateIdFromSlug({slug, id}) {
     return `${slug.toString().replaceAll("-", "").replaceAll("  ", "-").replaceAll(" ", "-")}-${id}`
@@ -761,6 +760,19 @@ export function generateRef({number, yearId, typeId, sessionId = "null", ref}) {
 }
 export function generateResultTitle({title, session}) {
     return `${title} - ${session}`
+}
+export function generateResultSlug({year, slug, session}) {
+    function getTypeSlug() {
+        switch (parseInt(slug)) {
+            case 1:
+                return "elementary";
+            case 2:
+                return "middle";
+            case 5:
+                return "high";
+        }
+    }
+    return `${getTypeSlug()}-${session}-${year}`
 }
 export function getType(name) {
     switch (name.trim().toUpperCase()){

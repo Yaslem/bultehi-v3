@@ -16,7 +16,6 @@ import Pagination from "./Pagination";
 import {LuUserCheck2, LuUserX2} from "react-icons/lu";
 import {LiaBirthdayCakeSolid} from "react-icons/lia";
 import Select, {Option} from "./Select";
-import {getDataForElementaryFilter, getResultStudent} from "../controllers/public/Result.server";
 import {MdNumbers} from "react-icons/md";
 import {AiFillEye, AiFillEyeInvisible} from "react-icons/ai";
 import {Cancel, SearchUI} from "./ActionsIcon";
@@ -25,7 +24,7 @@ import {
     generateIdFromSlug, generateSlug,
     getDegreeStudent,
     getGlobalResultStudent, getImageStates, getNumberForHuman, getDateForHuman, getNumberFormat,
-    getUrlForTypeResults, getValueForStudentResult
+    getValueForStudentResult
 } from "../helpers/Global.js";
 import {resultActions} from "../redux/slices/resultSlice.js";
 import {PageControlButtons, PageTitle} from "~/components/PageControlButtons.jsx";
@@ -764,7 +763,6 @@ export function Search({statesData = {}, countiesData = {}, isBySchool = false, 
 
 export function SectionCard({data, isState = true, isType, title, isControl}) {
     const controls = useSelector(state => state.controls.controls)
-    console.log(data);
     return (
         <>
             <PageControlButtons isControl={isControl} title={title}/>

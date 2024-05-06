@@ -135,7 +135,7 @@ export async function getResultStudentByNumber({year, type, category, session, n
                     typeResult: {
                         slug: parseInt(category)
                     },
-                    number: Number(number),
+                    number: parseInt(number),
                 },
                 select: SELECT_DATA_FOR_STUDENT,
             })
@@ -171,8 +171,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     case "name":
                         const count = await prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                stateId: parseInt(searchById),
+                                resultId: resultId,
+                                stateId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -182,8 +182,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         })
                         const results = await prisma.resultStudent.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                stateId: parseInt(searchById),
+                                resultId: resultId,
+                                stateId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -195,10 +195,10 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(results.length > 0){
-                            if(parseInt(page) > 0){
+                            if((page) > 0){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
                             } else {
                                 if(results.length > 1){
@@ -213,16 +213,16 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         if(!isNaN(+value)){
                             const result = await prisma.resultStudent.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
+                                    resultId: resultId,
                                     student: {
-                                        number: Number(value),
+                                        number: parseInt(value),
                                     }
                                 },
                                 select: SELECT_DATA_FOR_RESULT,
                             })
-                            if(result && result.state.id === parseInt(searchById)){
+                            if(result && result.state.id === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", result)
-                            } else if(result && result.state.id !== parseInt(searchById)){
+                            } else if(result && result.state.id !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لولاية ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -235,8 +235,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     case "name":
                         const count = await prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(searchById),
+                                resultId: resultId,
+                                countyId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -246,8 +246,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         })
                         const results = await prisma.resultStudent.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                countyId: parseInt(searchById),
+                                resultId: resultId,
+                                countyId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -259,10 +259,10 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(results.length > 0){
-                            if(parseInt(page) > 0){
+                            if((page) > 0){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
                             } else {
                                 if(results.length > 1){
@@ -277,16 +277,16 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         if(!isNaN(+value)){
                             const result = await prisma.resultStudent.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
+                                    resultId: resultId,
                                     student: {
-                                        number: Number(value),
+                                        number: parseInt(value),
                                     }
                                 },
                                 select: SELECT_DATA_FOR_RESULT
                             })
-                            if(result && result.county.id === parseInt(searchById)){
+                            if(result && result.county.id === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", result)
-                            } else if(result && result.county.id !== parseInt(searchById)){
+                            } else if(result && result.county.id !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لمثاطعة ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -299,8 +299,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     case "name":
                         const count = await prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                schoolId: parseInt(searchById),
+                                resultId: resultId,
+                                schoolId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -310,8 +310,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         })
                         const results = await prisma.resultStudent.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                schoolId: parseInt(searchById),
+                                resultId: resultId,
+                                schoolId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -323,10 +323,10 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(results.length > 0){
-                            if(parseInt(page) > 0){
+                            if((page) > 0){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
                             } else {
                                 if(results.length > 1){
@@ -341,16 +341,16 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         if(!isNaN(+value)){
                             const result = await prisma.resultStudent.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
+                                    resultId: resultId,
                                     student: {
-                                        number: Number(value),
+                                        number: parseInt(value),
                                     }
                                 },
                                 select: SELECT_DATA_FOR_RESULT
                             })
-                            if(result && result.school.id === parseInt(searchById)){
+                            if(result && result.school.id === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", result)
-                            } else if(result && result.school.id !== parseInt(searchById)){
+                            } else if(result && result.school.id !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لمدرسة ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -363,8 +363,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     case "name":
                         const count = await prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                centerId: parseInt(searchById),
+                                resultId: resultId,
+                                centerId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -374,8 +374,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         })
                         const results = await prisma.resultStudent.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                centerId: parseInt(searchById),
+                                resultId: resultId,
+                                centerId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -387,10 +387,10 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(results.length > 0){
-                            if(parseInt(page) > 0){
+                            if((page) > 0){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
                             } else {
                                 if(results.length > 1){
@@ -405,17 +405,16 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         if(!isNaN(+value)){
                             const result = await prisma.resultStudent.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
+                                    resultId: resultId,
                                     student: {
-                                        number: Number(value),
+                                        number: parseInt(value),
                                     }
                                 },
                                 select: SELECT_DATA_FOR_RESULT
                             })
-                            if(result && result.center.id === parseInt(searchById)){
-                                console.log(parseInt(searchById), result.center.id)
+                            if(result && result.center.id === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", result)
-                            } else if(result && result.center.id !== parseInt(searchById)){
+                            } else if(result && result.center.id !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لمركز ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -428,8 +427,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     case "name":
                         const count = await prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                typeId: parseInt(searchById),
+                                resultId: resultId,
+                                typeId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -439,8 +438,8 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         })
                         const results = await prisma.resultStudent.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                typeId: parseInt(searchById),
+                                resultId: resultId,
+                                typeId: searchById,
                                 student: {
                                     name: {
                                         contains: value,
@@ -452,10 +451,10 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(results.length > 0){
-                            if(parseInt(page) > 0){
+                            if((page) > 0){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
                             } else {
                                 if(results.length > 1){
@@ -470,16 +469,16 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                         if(!isNaN(+value)){
                             const result = await prisma.resultStudent.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
+                                    resultId: resultId,
                                     student: {
-                                        number: Number(value),
+                                        number: parseInt(value),
                                     }
                                 },
                                 select: SELECT_DATA_FOR_RESULT
                             })
-                            if(result && result.type.id === parseInt(searchById)){
+                            if(result && result.type.id === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", result)
-                            } else if(result && result.type.id !== parseInt(searchById)){
+                            } else if(result && result.type.id !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لشعبة ${searchByTitle.nameAr}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -492,7 +491,7 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                 case "name":
                     const count = await prisma.resultStudent.count({
                         where: {
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                             student: {
                                 name: {
                                     contains: value,
@@ -502,7 +501,7 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     })
                     const results = await prisma.resultStudent.findMany({
                         where: {
-                            resultId: Number(resultId),
+                            resultId: resultId,
                             student: {
                                 name: {
                                     contains: value,
@@ -514,7 +513,7 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                             degree: 'desc',
                         },
                         take: PAGINATE_LIMIT,
-                        skip: (parseInt(page) * PAGINATE_LIMIT),
+                        skip: ((page) * PAGINATE_LIMIT),
                     })
                     if(page !== 0){
                         return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", {results, count: Math.ceil(count / PAGINATE_LIMIT)})
@@ -532,9 +531,9 @@ export async function getResultStudent({resultId, target, value, page = 0, isTit
                     if(!isNaN(+value)){
                         const result = await prisma.resultStudent.findFirst({
                             where: {
-                                resultId: Number(resultId),
+                                resultId: resultId,
                                 student: {
-                                    number: Number(value),
+                                    number: parseInt(value),
                                 }
                             },
                             select: SELECT_DATA_FOR_RESULT,
@@ -558,11 +557,11 @@ export async function searchNameStudent({resultId, stateId = 0, value, countyId 
         if(stateId !== 0){
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: Number(resultId),
-                    stateId: parseInt(stateId),
-                    countyId: parseInt(countyId),
-                    schoolId: parseInt(schoolId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    stateId: stateId,
+                    countyId: countyId,
+                    schoolId: schoolId,
+                    centerId: centerId,
                     student: {
                         name: {
                             contains: value,
@@ -584,10 +583,10 @@ export async function searchNameStudent({resultId, stateId = 0, value, countyId 
         } else if(countyId !== 0){
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: Number(resultId),
-                    countyId: parseInt(countyId),
-                    schoolId: parseInt(schoolId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    countyId: countyId,
+                    schoolId: schoolId,
+                    centerId: centerId,
                     student: {
                         name: {
                             contains: value,
@@ -609,9 +608,9 @@ export async function searchNameStudent({resultId, stateId = 0, value, countyId 
         } else if(schoolId !== 0){
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: Number(resultId),
-                    schoolId: parseInt(schoolId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    schoolId: schoolId,
+                    centerId: centerId,
                     student: {
                         name: {
                             contains: value,
@@ -633,8 +632,8 @@ export async function searchNameStudent({resultId, stateId = 0, value, countyId 
         } else if(centerId !== 0){
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: Number(resultId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    centerId: centerId,
                     student: {
                         name: {
                             contains: value,
@@ -660,15 +659,15 @@ export async function searchNameStudent({resultId, stateId = 0, value, countyId 
 
 }
 export async function getResultById({resultId, url}) {
-    if(isNaN(+resultId)) throw redirect(url)
     const result = await prisma.result.findUnique({
         where: {
-            id: parseInt(resultId)
+            id: resultId
         },
         select: {
             id: true,
             isPublished: true,
             title: true,
+            slug: true,
             type: {
                 select: {
                     id: true,
@@ -720,7 +719,7 @@ export async function getStudentsDegreeByCategoryName({by, name, resultId, degre
                     state: {
                         name: name
                     },
-                    resultId: parseInt(resultId),
+                    resultId: resultId,
                     degree: {
                         lt: PASSING_DEGREE_IN_ELEMENTARY,
                         gte: degree,
@@ -734,7 +733,7 @@ export async function getStudentsDegreeByCategoryName({by, name, resultId, degre
                     county: {
                         name: name
                     },
-                    resultId: parseInt(resultId),
+                    resultId: resultId,
                     degree: {
                         lt: PASSING_DEGREE_IN_ELEMENTARY,
                         gte: degree,
@@ -748,7 +747,7 @@ export async function getStudentsDegreeByCategoryName({by, name, resultId, degre
                     school: {
                         name: name
                     },
-                    resultId: parseInt(resultId),
+                    resultId: resultId,
                     degree: {
                         lt: PASSING_DEGREE_IN_ELEMENTARY,
                         gte: degree,
@@ -762,7 +761,7 @@ export async function getStudentsDegreeByCategoryName({by, name, resultId, degre
                     center: {
                         name: name
                     },
-                    resultId: parseInt(resultId),
+                    resultId: resultId,
                     degree: {
                         lt: PASSING_DEGREE_IN_ELEMENTARY,
                         gte: degree,
@@ -773,30 +772,27 @@ export async function getStudentsDegreeByCategoryName({by, name, resultId, degre
     }
 }
 export async function getSchoolById({schoolId, url}) {
-    if(isNaN(+schoolId)) throw redirect(url)
     const school = await prisma.school.findUnique({
         where: {
-            id: parseInt(schoolId)
+            id: schoolId
         }
     })
     if(!school) throw redirect(url)
     return school
 }
 export async function getCenterById({centerId, url}) {
-    if(isNaN(+centerId)) throw redirect(url)
     const center = await prisma.center.findUnique({
         where: {
-            id: parseInt(centerId)
+            id: centerId
         }
     })
     if(!center) throw redirect(url)
     return center
 }
 export async function getStateById({stateId, url}) {
-    if(isNaN(+stateId)) throw redirect(url)
     const state = await prisma.state.findUnique({
         where: {
-            id: parseInt(stateId)
+            id: stateId
         }
     })
     if(!state) throw redirect(url)
@@ -804,20 +800,18 @@ export async function getStateById({stateId, url}) {
 }
 
 export async function getTypeById({typeId, url}) {
-    if(isNaN(+typeId)) throw redirect(url)
     const type = await prisma.bacType.findUnique({
         where: {
-            id: parseInt(typeId)
+            id: typeId
         }
     })
     if(!type) throw redirect(url)
     return type
 }
 export async function getCountyById({countyId, url}) {
-    if(isNaN(+countyId)) throw redirect(url)
     const county = await prisma.county.findUnique({
         where: {
-            id: parseInt(countyId)
+            id: countyId
         }
     })
     if(!county) throw redirect(url)
@@ -827,7 +821,7 @@ export async function getTopStudentsBySchoolId({schoolId, resultId, url}) {
     const result = await getResultById({resultId, url})
     const top = await prisma.resultStudent.findMany({
         where: {
-            schoolId: parseInt(schoolId),
+            schoolId: schoolId,
             resultId: result.id,
         },
         select: SELECT_DATA_FOR_RESULT,
@@ -845,7 +839,7 @@ export async function getTopStudentsByCenterId({centerId, resultId, url}) {
     const result = await getResultById({resultId, url})
     const top = await prisma.resultStudent.findMany({
         where: {
-            centerId: parseInt(centerId),
+            centerId: centerId,
             resultId: result.id,
         },
         select: SELECT_DATA_FOR_RESULT,
@@ -863,7 +857,7 @@ export async function getStudentsByCenterId({centerId, resultId, url}) {
     const result = await getResultById({resultId, url})
     const top = await prisma.student.findMany({
         where: {
-            centerId: parseInt(centerId),
+            centerId: centerId,
             resultId: result.id,
         },
         select: SELECT_DATA_FOR_STUDENT,
@@ -882,7 +876,7 @@ export async function getTopStudentsByCountyId({countyId, resultId, url}) {
 
     const top = await prisma.resultStudent.findMany({
         where: {
-            countyId: parseInt(countyId),
+            countyId: countyId,
             resultId: result.id,
         },
         select: SELECT_DATA_FOR_RESULT,
@@ -898,8 +892,8 @@ export async function getTopStudentsByStateId({stateId, resultId, url}) {
     const result = await getResultById({resultId, url})
     const top = await prisma.resultStudent.findMany({
         where: {
-            stateId: parseInt(stateId),
-            resultId: parseInt(result.id),
+            stateId: stateId,
+            resultId: result.id,
         },
         select: SELECT_DATA_FOR_RESULT,
         orderBy: {
@@ -917,8 +911,8 @@ export async function getTopStudentsByTypeId({typeId, resultId, url}) {
     const result = await getResultById({resultId, url})
     const top = await prisma.resultStudent.findMany({
         where: {
-            typeId: parseInt(typeId),
-            resultId: parseInt(result.id),
+            typeId: typeId,
+            resultId: result.id,
         },
         select: SELECT_DATA_FOR_RESULT,
         orderBy: {
@@ -944,13 +938,13 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                             degree: {
                                 gte: PASSING_DEGREE_IN_ELEMENTARY,
                             },
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                         }
 
                     }),
                     prisma.resultStudent.count({
                         where: {
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                             degree: {
                                 lt: PASSING_DEGREE_IN_ELEMENTARY,
                             },
@@ -965,20 +959,20 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     prisma.resultStudent.count({
                         where: {
                             decision: 'Admis',
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                         }
 
                     }),
                     prisma.resultStudent.count({
                         where: {
                             decision: 'Sessionnaire',
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                         }
 
                     }),
                     prisma.resultStudent.count({
                         where: {
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                             decision: 'Ajourné',
                         }
 
@@ -991,13 +985,13 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     prisma.resultStudent.count({
                         where: {
                             decision: 'Admis',
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                         }
 
                     }),
                     prisma.resultStudent.count({
                         where: {
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                             decision: 'Ajourné',
                         }
 
@@ -1014,8 +1008,8 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     const [all, admis, ajourne] = await prisma.$transaction([
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                stateId: parseInt(valueId),
+                                resultId: resultId,
+                                stateId: valueId,
                             }
 
                         }),
@@ -1024,15 +1018,15 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                                 degree: {
                                     gte: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
-                                resultId: parseInt(resultId),
-                                stateId: parseInt(valueId),
+                                resultId: resultId,
+                                stateId: valueId,
                             }
 
                         }),
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                stateId: parseInt(valueId),
+                                resultId: resultId,
+                                stateId: valueId,
                                 degree: {
                                     lt: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
@@ -1046,8 +1040,8 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     const [all, admis, ajourne] = await prisma.$transaction([
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(valueId),
+                                resultId: resultId,
+                                countyId: valueId,
                             }
 
                         }),
@@ -1056,15 +1050,15 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                                 degree: {
                                     gte: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(valueId),
+                                resultId: resultId,
+                                countyId: valueId,
                             }
 
                         }),
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(valueId),
+                                resultId: resultId,
+                                countyId: valueId,
                                 degree: {
                                     lt: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
@@ -1078,8 +1072,8 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     const [all, admis, ajourne] = await prisma.$transaction([
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                schoolId: parseInt(valueId),
+                                resultId: resultId,
+                                schoolId: valueId,
                             }
 
                         }),
@@ -1088,15 +1082,15 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                                 degree: {
                                     gte: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
-                                resultId: parseInt(resultId),
-                                schoolId: parseInt(valueId),
+                                resultId: resultId,
+                                schoolId: valueId,
                             }
 
                         }),
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                schoolId: parseInt(valueId),
+                                resultId: resultId,
+                                schoolId: valueId,
                                 degree: {
                                     lt: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
@@ -1110,8 +1104,8 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                     const [all, admis, ajourne] = await prisma.$transaction([
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                centerId: parseInt(valueId),
+                                resultId: resultId,
+                                centerId: valueId,
                             }
 
                         }),
@@ -1120,15 +1114,15 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                                 degree: {
                                     gte: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
-                                resultId: parseInt(resultId),
-                                centerId: parseInt(valueId),
+                                resultId: resultId,
+                                centerId: valueId,
                             }
 
                         }),
                         prisma.resultStudent.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                centerId: parseInt(valueId),
+                                resultId: resultId,
+                                centerId: valueId,
                                 degree: {
                                     lt: PASSING_DEGREE_IN_ELEMENTARY,
                                 },
@@ -1144,23 +1138,23 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                         const [all, admis, ajourne] = await prisma.$transaction([
                             prisma.resultStudent.count({
                                 where: {
-                                    resultId: parseInt(resultId),
-                                    stateId: parseInt(valueId),
+                                    resultId: resultId,
+                                    stateId: valueId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
                                     decision: 'Admis',
-                                    stateId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    stateId: valueId,
+                                    resultId: resultId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
-                                    stateId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    stateId: valueId,
+                                    resultId: resultId,
                                     decision: 'Ajourné',
                                 }
 
@@ -1171,23 +1165,23 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                         const [all, admis, ajourne] = await prisma.$transaction([
                             prisma.resultStudent.count({
                                 where: {
-                                    resultId: parseInt(resultId),
-                                    countyId: parseInt(valueId),
+                                    resultId: resultId,
+                                    countyId: valueId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
                                     decision: 'Admis',
-                                    countyId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    countyId: valueId,
+                                    resultId: resultId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
-                                    countyId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    countyId: valueId,
+                                    resultId: resultId,
                                     decision: 'Ajourné',
                                 }
 
@@ -1198,23 +1192,23 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                         const [all, admis, ajourne] = await prisma.$transaction([
                             prisma.resultStudent.count({
                                 where: {
-                                    resultId: parseInt(resultId),
-                                    schoolId: parseInt(valueId),
+                                    resultId: resultId,
+                                    schoolId: valueId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
                                     decision: 'Admis',
-                                    schoolId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    schoolId: valueId,
+                                    resultId: resultId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
-                                    schoolId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    schoolId: valueId,
+                                    resultId: resultId,
                                     decision: 'Ajourné',
                                 }
 
@@ -1225,23 +1219,23 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                         const [all, admis, ajourne] = await prisma.$transaction([
                             prisma.resultStudent.count({
                                 where: {
-                                    resultId: parseInt(resultId),
-                                    centerId: parseInt(valueId),
+                                    resultId: resultId,
+                                    centerId: valueId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
                                     decision: 'Admis',
-                                    centerId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    centerId: valueId,
+                                    resultId: resultId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
-                                    centerId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    centerId: valueId,
+                                    resultId: resultId,
                                     decision: 'Ajourné',
                                 }
 
@@ -1252,23 +1246,23 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
                         const [all, admis, ajourne] = await prisma.$transaction([
                             prisma.resultStudent.count({
                                 where: {
-                                    resultId: parseInt(resultId),
-                                    typeId: parseInt(valueId),
+                                    resultId: resultId,
+                                    typeId: valueId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
                                     decision: 'Admis',
-                                    typeId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    typeId: valueId,
+                                    resultId: resultId,
                                 }
 
                             }),
                             prisma.resultStudent.count({
                                 where: {
-                                    typeId: parseInt(valueId),
-                                    resultId: parseInt(resultId),
+                                    typeId: valueId,
+                                    resultId: resultId,
                                     decision: 'Ajourné',
                                 }
 
@@ -1286,7 +1280,7 @@ export async function getCountStudents({nameData, valueId, valueTitle, resultId 
 export async function getPublicTypeSlugByResultId(resultId) {
     const result = await prisma.result.findUnique({
         where: {
-            id: parseInt(resultId)
+            id: resultId
         },
         include: {
             type: true
@@ -1428,7 +1422,7 @@ export async function getSchoolsByResultId({resultId, page = 0, url, sort = "des
             },
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
         orderBy: { results: { _count: sort} }
     })
 
@@ -1477,7 +1471,7 @@ export async function getCentersByResultId({resultId, page = 0, url, sort = "des
             },
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
         orderBy: { results: { _count: sort} }
     })
 
@@ -1496,21 +1490,21 @@ export async function getCentersByResultId({resultId, page = 0, url, sort = "des
 export async function getPublicResultStudentBySchoolId({resultId, page = 0, schoolId}) {
     const count = await prisma.student.count({
         where: {
-            resultId: parseInt(resultId),
-            schoolId: parseInt(schoolId),
+            resultId: resultId,
+            schoolId: schoolId,
         },
     })
     const students = await prisma.student.findMany({
         where: {
-            resultId: parseInt(resultId),
-            schoolId: parseInt(schoolId),
+            resultId: resultId,
+            schoolId: schoolId,
         },
         select: SELECT_DATA_FOR_STUDENT,
         orderBy: {
             degree: 'desc',
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
     })
     if(students.length > 0){
         return sendResponseServer(true, 200, "تم جلب الطلاب بنجاح", {students, count: Math.ceil(count / PAGINATE_LIMIT)})
@@ -1520,21 +1514,21 @@ export async function getPublicResultStudentBySchoolId({resultId, page = 0, scho
 export async function getPublicResultStudentByCenterId({resultId, page = 0, centerId}) {
     const count = await prisma.student.count({
         where: {
-            resultId: parseInt(resultId),
-            centerId: parseInt(centerId),
+            resultId: resultId,
+            centerId: centerId,
         },
     })
     const students = await prisma.student.findMany({
         where: {
-            resultId: parseInt(resultId),
-            centerId: parseInt(centerId),
+            resultId: resultId,
+            centerId: centerId,
         },
         select: SELECT_DATA_FOR_STUDENT,
         orderBy: {
             degree: 'desc',
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
     })
     if(students.length > 0){
         return sendResponseServer(true, 200, "تم جلب الطلاب بنجاح", {students, count: Math.ceil(count / PAGINATE_LIMIT)})
@@ -1553,8 +1547,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     case "name":
                         const count = await prisma.student.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                stateId: parseInt(searchById),
+                                resultId: resultId,
+                                stateId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1562,8 +1556,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         })
                         const students = await prisma.student.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                stateId: parseInt(searchById),
+                                resultId: resultId,
+                                stateId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1573,7 +1567,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(students.length > 0){
                             if(students.length > 1){
@@ -1587,14 +1581,14 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         if(!isNaN(+value)){
                             const student = await prisma.student.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
-                                    number: Number(value),
+                                    resultId: resultId,
+                                    number: parseInt(value),
                                 },
                                 select: SELECT_DATA_FOR_STUDENT,
                             })
-                            if(student && student.stateId === parseInt(searchById)){
+                            if(student && student.stateId === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", student)
-                            } else if(student && student.stateId !== parseInt(searchById)){
+                            } else if(student && student.stateId !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لولاية ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -1607,8 +1601,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     case "name":
                         const count = await prisma.student.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(searchById),
+                                resultId: resultId,
+                                countyId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1616,8 +1610,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         })
                         const students = await prisma.student.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                countyId: parseInt(searchById),
+                                resultId: resultId,
+                                countyId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1627,7 +1621,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(students.length > 0){
                             if(students.length > 1){
@@ -1641,15 +1635,14 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         if(!isNaN(+value)){
                             const student = await prisma.student.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
-                                    number: Number(value),
+                                    resultId: resultId,
+                                    number: parseInt(value),
                                 },
                                 select: SELECT_DATA_FOR_STUDENT
                             })
-                            console.log(student.countyId)
-                            if(student && student.countyId === parseInt(searchById)){
+                            if(student && student.countyId === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", student)
-                            } else if(student && student.countyId !== parseInt(searchById)){
+                            } else if(student && student.countyId !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لبلدية ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -1662,8 +1655,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     case "name":
                         const count = await prisma.student.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                schoolId: parseInt(searchById),
+                                resultId: resultId,
+                                schoolId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1671,8 +1664,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         })
                         const students = await prisma.student.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                schoolId: parseInt(searchById),
+                                resultId: resultId,
+                                schoolId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1682,7 +1675,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(students.length > 0){
                             if(students.length > 1){
@@ -1696,14 +1689,14 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         if(!isNaN(+value)){
                             const student = await prisma.student.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
-                                    number: Number(value),
+                                    resultId: resultId,
+                                    number: parseInt(value),
                                 },
                                 select: SELECT_DATA_FOR_STUDENT
                             })
-                            if(student && student.schoolId === parseInt(searchById)){
+                            if(student && student.schoolId === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", student)
-                            } else if(student && student.schoolId !== parseInt(searchById)){
+                            } else if(student && student.schoolId !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لمدرسة ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -1716,8 +1709,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     case "name":
                         const count = await prisma.student.count({
                             where: {
-                                resultId: parseInt(resultId),
-                                centerId: parseInt(searchById),
+                                resultId: resultId,
+                                centerId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1725,8 +1718,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         })
                         const students = await prisma.student.findMany({
                             where: {
-                                resultId: Number(resultId),
-                                centerId: parseInt(searchById),
+                                resultId: resultId,
+                                centerId: searchById,
                                 name: {
                                     contains: value,
                                 }
@@ -1736,7 +1729,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                                 degree: 'desc',
                             },
                             take: PAGINATE_LIMIT,
-                            skip: (parseInt(page) * PAGINATE_LIMIT),
+                            skip: ((page) * PAGINATE_LIMIT),
                         })
                         if(students.length > 0){
                             if(students.length > 1){
@@ -1750,14 +1743,14 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                         if(!isNaN(+value)){
                             const student = await prisma.student.findFirst({
                                 where: {
-                                    resultId: Number(resultId),
-                                    number: Number(value),
+                                    resultId: resultId,
+                                    number: parseInt(value),
                                 },
                                 select: SELECT_DATA_FOR_STUDENT
                             })
-                            if(student && student.centerId === parseInt(searchById)){
+                            if(student && student.centerId === searchById){
                                 return sendResponseServer(true, 200, "تم جلب النتيجة بنجاح", student)
-                            } else if(student && student.centerId !== parseInt(searchById)){
+                            } else if(student && student.centerId !== searchById){
                                 return sendResponseServer(false, 400, `رقم الطالب "${value}" لا ينتمي لمركز ${searchByTitle.name}، رجاء تأكد مرة أخرى.`)
                             }
                             return sendResponseServer(false, 400, `لم نتمكن من العثور على ${value}، رجاء حاول مرة أخرى.`)
@@ -1770,7 +1763,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                 case "name":
                     const count = await prisma.student.count({
                         where: {
-                            resultId: parseInt(resultId),
+                            resultId: resultId,
                             name: {
                                 contains: value,
                             }
@@ -1778,7 +1771,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     })
                     const students = await prisma.student.findMany({
                         where: {
-                            resultId: Number(resultId),
+                            resultId: resultId,
                             name: {
                                 contains: value,
                             }
@@ -1788,7 +1781,7 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                             degree: 'desc',
                         },
                         take: PAGINATE_LIMIT,
-                        skip: (parseInt(page) * PAGINATE_LIMIT),
+                        skip: ((page) * PAGINATE_LIMIT),
                     })
                     if(students.length > 0){
                         if(students.length > 1){
@@ -1802,8 +1795,8 @@ export async function getPublicResultStudent({resultId, target, value, page = 0,
                     if(!isNaN(+value)){
                         const student = await prisma.student.findFirst({
                             where: {
-                                resultId: Number(resultId),
-                                number: Number(value),
+                                resultId: resultId,
+                                number: parseInt(value),
                             },
                             select: SELECT_DATA_FOR_STUDENT
                         })
@@ -2044,7 +2037,7 @@ export async function getCountiesByResultId({resultId, page = 0, url, sort = "de
             },
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
         orderBy: { results: { _count: sort} }
     })
 
@@ -2067,7 +2060,7 @@ export async function getPublicAllCountiesByStateIdAndResultId({resultId, stateI
             results: {
                 some: {
                     resultId: result.id,
-                    stateId: parseInt(stateId),
+                    stateId: stateId,
                 }
             },
             NOT: {
@@ -2093,7 +2086,7 @@ export async function getPublicAllSchoolsByCountyIdAndResultId({resultId, county
             results: {
                 some: {
                     resultId: result.id,
-                    countyId: parseInt(countyId),
+                    countyId: countyId,
                 }
             },
             NOT: {
@@ -2119,7 +2112,7 @@ export async function getPublicAllCentersBySchoolIdAndResultId({resultId, school
             results: {
                 some: {
                     resultId: result.id,
-                    schoolId: parseInt(schoolId),
+                    schoolId: schoolId,
                 }
             },
             NOT: {
@@ -2145,8 +2138,8 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                 where: {
                     results: {
                         some: {
-                            resultId: parseInt(resultId),
-                            stateId: parseInt(stateId),
+                            resultId: resultId,
+                            stateId: stateId,
                         }
                     },
                     NOT: {
@@ -2162,18 +2155,18 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
             })
             const count = await prisma.resultStudent.count({
                 where: {
-                    resultId: parseInt(resultId),
-                    stateId: parseInt(stateId),
+                    resultId: resultId,
+                    stateId: stateId,
                 },
             })
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: parseInt(resultId),
-                    stateId: parseInt(stateId),
+                    resultId: resultId,
+                    stateId: stateId,
                 },
                 select: SELECT_DATA_FOR_RESULT,
                 take: PAGINATE_LIMIT,
-                skip: (parseInt(page) * PAGINATE_LIMIT),
+                skip: ((page) * PAGINATE_LIMIT),
                 orderBy: {
                     degree: 'desc',
                 },
@@ -2184,14 +2177,14 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
             return sendResponseServer(false, 400, "لا توجد مقاطعات")
         }
         case "county": {
-            if(parseInt(stateId) !== 0){
+            if(stateId !== 0){
                 const schools = await prisma.school.findMany({
                     where: {
                         results: {
                             some: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(countyId),
-                                stateId: parseInt(stateId),
+                                resultId: resultId,
+                                countyId: countyId,
+                                stateId: stateId,
                             }
                         },
                         NOT: {
@@ -2207,20 +2200,20 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                 })
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2233,8 +2226,8 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                     where: {
                         results: {
                             some: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(countyId),
+                                resultId: resultId,
+                                countyId: countyId,
                             }
                         },
                         NOT: {
@@ -2250,18 +2243,18 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                 })
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
+                        resultId: resultId,
+                        countyId: countyId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
+                        resultId: resultId,
+                        countyId: countyId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2273,15 +2266,15 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
             return sendResponseServer(false, 400, "لا توجد مدارس")
         }
         case "school": {
-            if(parseInt(stateId) !== 0 && parseInt(countyId) !== 0){
+            if(stateId !== 0 && countyId !== 0){
                 const centers = await prisma.center.findMany({
                     where: {
                         results: {
                             some: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(countyId),
-                                stateId: parseInt(stateId),
-                                schoolId: parseInt(schoolId),
+                                resultId: resultId,
+                                countyId: countyId,
+                                stateId: stateId,
+                                schoolId: schoolId,
                             }
                         },
                         NOT: {
@@ -2297,22 +2290,22 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                 })
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
-                        schoolId: parseInt(schoolId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
+                        schoolId: schoolId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
-                        schoolId: parseInt(schoolId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
+                        schoolId: schoolId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2325,9 +2318,9 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                     where: {
                         results: {
                             some: {
-                                resultId: parseInt(resultId),
-                                countyId: parseInt(countyId),
-                                schoolId: parseInt(schoolId),
+                                resultId: resultId,
+                                countyId: countyId,
+                                schoolId: schoolId,
                             }
                         },
                         NOT: {
@@ -2343,20 +2336,20 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
                 })
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        schoolId: parseInt(schoolId),
-                        countyId: parseInt(countyId),
+                        resultId: resultId,
+                        schoolId: schoolId,
+                        countyId: countyId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        schoolId: parseInt(schoolId),
-                        countyId: parseInt(countyId),
+                        resultId: resultId,
+                        schoolId: schoolId,
+                        countyId: countyId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2368,27 +2361,27 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
             return sendResponseServer(false, 400, "لا توجد مدارس")
         }
         case "center": {
-            if(parseInt(stateId) !== 0 && parseInt(countyId) !== 0 && parseInt(schoolId) !== 0){
+            if((stateId) !== 0 && (countyId) !== 0 && (schoolId) !== 0){
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
-                        schoolId: parseInt(schoolId),
-                        centerId: parseInt(centerId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
+                        schoolId: schoolId,
+                        centerId: centerId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        countyId: parseInt(countyId),
-                        stateId: parseInt(stateId),
-                        schoolId: parseInt(schoolId),
-                        centerId: parseInt(centerId),
+                        resultId: resultId,
+                        countyId: countyId,
+                        stateId: stateId,
+                        schoolId: schoolId,
+                        centerId: centerId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2399,20 +2392,20 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
             } else {
                 const count = await prisma.resultStudent.count({
                     where: {
-                        resultId: parseInt(resultId),
-                        centerId: parseInt(centerId),
-                        schoolId: parseInt(schoolId),
+                        resultId: resultId,
+                        centerId: centerId,
+                        schoolId: schoolId,
                     },
                 })
                 const results = await prisma.resultStudent.findMany({
                     where: {
-                        resultId: parseInt(resultId),
-                        schoolId: parseInt(schoolId),
-                        centerId: parseInt(centerId),
+                        resultId: resultId,
+                        schoolId: schoolId,
+                        centerId: centerId,
                     },
                     select: SELECT_DATA_FOR_RESULT,
                     take: PAGINATE_LIMIT,
-                    skip: (parseInt(page) * PAGINATE_LIMIT),
+                    skip: ((page) * PAGINATE_LIMIT),
                     orderBy: {
                         degree: 'desc',
                     },
@@ -2426,18 +2419,18 @@ export async function getDataForElementaryFilter({resultId, by, stateId = 0, cou
         case "onlyCenter": {
             const count = await prisma.resultStudent.count({
                 where: {
-                    resultId: parseInt(resultId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    centerId: centerId,
                 },
             })
             const results = await prisma.resultStudent.findMany({
                 where: {
-                    resultId: parseInt(resultId),
-                    centerId: parseInt(centerId),
+                    resultId: resultId,
+                    centerId: centerId,
                 },
                 select: SELECT_DATA_FOR_RESULT,
                 take: PAGINATE_LIMIT,
-                skip: (parseInt(page) * PAGINATE_LIMIT),
+                skip: ((page) * PAGINATE_LIMIT),
                 orderBy: {
                     degree: 'desc',
                 },
@@ -2492,6 +2485,7 @@ export async function getPublicAllResults({slug, page = 0, byCategory}) {
         select: {
             id: true,
             title: true,
+            slug: true,
             year: true,
             type: true,
             session: true,
@@ -2505,7 +2499,7 @@ export async function getPublicAllResults({slug, page = 0, byCategory}) {
             }
         },
         take: PAGINATE_LIMIT,
-        skip: (parseInt(page) * PAGINATE_LIMIT),
+        skip: ((page) * PAGINATE_LIMIT),
     })
     await Promise.all(results.map( async result => {
         newResults.push({

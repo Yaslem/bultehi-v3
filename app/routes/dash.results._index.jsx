@@ -49,6 +49,7 @@ export const loader = async () => {
 export async function action({ request }) {
     let {action, status, fileResult, file, title, isBac, typeId, sessionId, yearId, id} = Object.fromEntries(await request.formData());
     isBac = isBac === "true"
+    console.log("type id: ", typeId)
     const user = await getUserAuthenticated(request)
     if(user && user.role === "ADMIN"){
         switch (action) {
@@ -126,9 +127,7 @@ export default function DashResults_index() {
     const handelCreate = async (e) => {
         e.preventDefault()
         dispatch(toastActions.setIsShow(false))
-
-        const validated = isBac ? Validate.createResult.safeParse({title, typeId: parseInt(typeId), yearId: parseInt(yearId), sessionId: parseInt(sessionId), file}) : Validate.createResult.safeParse({title, typeId: parseInt(typeId), yearId: parseInt(yearId), file})
-
+        const validated = isBac ? Validate.createResult.safeParse({title, typeId, yearId, sessionId, file}) : Validate.createResult.safeParse({title, typeId, yearId, file})
         if(validated.success){
             setError({})
             const formData = new FormData()
@@ -152,7 +151,7 @@ export default function DashResults_index() {
         e.preventDefault()
         dispatch(toastActions.setIsShow(false))
 
-        const validated = isBac ? Validate.updateResult.safeParse({title, yearId: parseInt(yearId), sessionId: parseInt(sessionId)}) : Validate.updateResult.safeParse({title, yearId: parseInt(yearId)})
+        const validated = isBac ? Validate.updateResult.safeParse({title, yearId, sessionId}) : Validate.updateResult.safeParse({title, yearId})
 
         if(validated.success){
             setError({})
@@ -204,8 +203,8 @@ export default function DashResults_index() {
                                         <Select
                                             name={"typeId"}
                                             onChange={(e) => {
-                                                setTypeId(e.target.value.toString().split("-").shift())
-                                                if(Number(e.target.value.toString().split("-").pop()) === 5) {
+                                                setTypeId(e.target.value.toString().split("ISSLUG").shift())
+                                                if(Number(e.target.value.toString().split("ISSLUG").pop()) === 5) {
                                                     setIsBac(true)
                                                 } else {
                                                     setIsBac(false)
@@ -216,7 +215,7 @@ export default function DashResults_index() {
                                             isError={error?.typeId}>
                                             {
                                                 types.data.map((type, index) =>
-                                                    <Option key={index} value={`${type.id}-${type.slug}`} selected={typeId} title={type.name} />
+                                                    <Option key={index} value={`${type.id}ISSLUG${type.slug}`} selected={typeId} title={type.name} />
                                                 )
                                             }
                                         </Select>

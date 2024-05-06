@@ -255,6 +255,7 @@ model Center {
 model Result {
   id          String             @id @default(uuid())
   title       String
+  slug       String @unique
   file        String
   isPublished Boolean         @default(false)
   isUploaded  Boolean         @default(false)

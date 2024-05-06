@@ -33,7 +33,7 @@ export default function HighResults_index() {
                         results.map((result, index) =>
                             <Tr key={index}>
                                 <Td value={
-                                    <Link to={generateSlug({slug: result.title, id: result.id})} className={"text-indigo-700 hover:text-indigo-600"}>{result.title}</Link>
+                                    <Link to={generateSlug({slug: result.slug, id: result.id})} className={"text-indigo-700 hover:text-indigo-600"}>{result.title}</Link>
                                 } />
                                 <Td value={result.year.name} />
                                 <Td value={result.type.name} />

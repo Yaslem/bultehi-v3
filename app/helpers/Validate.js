@@ -18,15 +18,15 @@ export default class Validate {
         file: z.any()
             .refine((file) => this.#checkFileType(file), "فقط ملف اكسل هو المدعوم فقط.")
             .refine((file) => file !== undefined || file?.length !== 0, "الملف مطلوب"),
-        yearId: z.number({
+        yearId: z.string({
             required_error: "السنة مطلوبة.",
             invalid_type_error: "السنة غير صالحة.",
         }),
-        typeId: z.number({
+        typeId: z.string({
             required_error: "النوع مطلوب.",
             invalid_type_error: "النوع غير صالح.",
         }),
-        sessionId: z.number({
+        sessionId: z.string({
             required_error: "الدورة مطلوبة.",
             invalid_type_error: "الدورة غير صالحة.",
         }).optional(),
@@ -46,11 +46,11 @@ export default class Validate {
             required_error: "العنوان مطلوب.",
             invalid_type_error: "العنوان غير صالح.",
         }).min(2, { message: "العنوان يجب أن يكون أطول من حرفين" }),
-        yearId: z.number({
+        yearId: z.string({
             required_error: "السنة مطلوبة.",
             invalid_type_error: "السنة غير صالحة.",
         }),
-        sessionId: z.number({
+        sessionId: z.string({
             required_error: "الدورة مطلوبة.",
             invalid_type_error: "الدورة غير صالحة.",
         }).optional(),
@@ -79,21 +79,21 @@ export default class Validate {
             required_error: "المرجع مطلوب.",
             invalid_type_error: "المرجع غير صالح.",
         }).min(2, { message: "المرجع يجب أن يكون أطول من حرفين" }),
-        yearId: z.number({
+        yearId: z.string({
             required_error: "السنة مطلوبة.",
             invalid_type_error: "السنة غير صالحة.",
         }),
-        typeId: z.number({
+        typeId: z.string({
             required_error: "النوع مطلوب.",
             invalid_type_error: "النوع غير صالح.",
         }),
-        resultId: z.number({
+        resultId: z.string({
             required_error: "النتيجة مطلوبة.",
             invalid_type_error: "النتيجة غير صالحة.",
         })
     });
     static updateException = z.object({
-        exceptionId: z.number({
+        exceptionId: z.string({
             required_error: "معرف الاستثناء مطلوب.",
             invalid_type_error: "معرف الاستثناء غير صالح.",
         }),
@@ -113,11 +113,11 @@ export default class Validate {
             required_error: "المرجع مطلوب.",
             invalid_type_error: "المرجع غير صالح.",
         }).min(2, { message: "المرجع يجب أن يكون أطول من حرفين" }),
-        yearId: z.number({
+        yearId: z.string({
             required_error: "السنة مطلوبة.",
             invalid_type_error: "السنة غير صالحة.",
         }),
-        typeId: z.number({
+        typeId: z.string({
             required_error: "النوع مطلوب.",
             invalid_type_error: "النوع غير صالح.",
         }),

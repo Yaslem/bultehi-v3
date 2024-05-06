@@ -5,7 +5,7 @@ import Validate from "../helpers/Validate";
 import excelToJson from 'convert-excel-to-json'
 import GetUnique from "./helpres/getUnique";
 import {
-    generateRef,
+    generateRef, generateResultSlug,
     generateResultTitle,
     getName,
     getNameStudentOnServer,
@@ -63,7 +63,7 @@ export async function getExceptions(){
 }
 export async function uploadResults(id){
     const result = await prisma.result.findUnique({
-        where: { id: parseInt(id) },
+        where: { id },
         include: {
             type: true
         },
@@ -92,7 +92,7 @@ export async function uploadResults(id){
 
         if(results.allIsReady){
             await prisma.result.update({
-                where: { id: parseInt(id) },
+                where: { id },
                 data: {
                     updatedAt: new Date()
                 }
@@ -113,7 +113,7 @@ export async function getExceptionByName(name, yearId){
     return await prisma.exception.findFirst({ where: { name, yearId } })
 }
 export async function getExceptionById(id){
-    return await prisma.exception.findFirst({ where: { id: parseInt(id) } })
+    return await prisma.exception.findFirst({ where: { id } })
 }
 export async function deleteResult(id, file){
 
@@ -122,7 +122,7 @@ export async function deleteResult(id, file){
     }
     await prisma.result.delete({
         where: {
-            id: parseInt(id)
+            id
         }
     })
     return sendResponseServer(true, 200,"تم حذف النتائج بنجاح")
@@ -131,7 +131,7 @@ export async function deleteException(id){
 
     await prisma.exception.delete({
         where: {
-            id: parseInt(id)
+            id
         }
     })
     return sendResponseServer(true, 200,"تم حذف الاستنثاء بنجاح")
@@ -139,7 +139,7 @@ export async function deleteException(id){
 
 export async function getResultById(id){
     const result = await prisma.result.findUnique({
-        where: { id: parseInt(id) },
+        where: { id },
         include: {
             year: true,
             type: true,
@@ -651,20 +651,25 @@ export async function createCounties(counties){
 }
 
 export async function createResult(data) {
-    const validated = !data.isBac ?  Validate.createResult.safeParse({title: data.title, typeId: parseInt(data.typeId), yearId: parseInt(data.yearId), file: data.fileResult}) : Validate.createResult.safeParse({title: data.title, typeId: parseInt(data.typeId), yearId: parseInt(data.yearId), sessionId: parseInt(data.sessionId), file: data.fileResult})
-    const existingResult = await getResultByTitle(data.title, parseInt(data.yearId))
+
+    const validated = !data.isBac ?  Validate.createResult.safeParse({title: data.title, typeId: data.typeId, yearId: data.yearId, file: data.fileResult}) : Validate.createResult.safeParse({title: data.title, typeId: data.typeId, yearId: data.yearId, sessionId: data.sessionId, file: data.fileResult})
+    const existingResult = await getResultByTitle(data.title, data.yearId)
     if(existingResult) return sendResponseServer(false, 400, "النتيجة موجودة بالفعل.")
     if(validated.success){
+        const session = await prisma.session.findUnique({where: { id: data.sessionId }})
+        const year = await prisma.year.findUnique({where: { id: data.yearId }})
+        const type = await prisma.reslutType.findUnique({where: { id: data.typeId }})
+
         if(data.isBac){
-            const session = await prisma.session.findUnique({where: { id: parseInt(data.sessionId) }})
             const fileName = await upload("results", data.fileResult, data.isBac, session.slug)
             await prisma.result.create({
                 data: {
                     title: generateResultTitle({title: data.title, session: session.name}),
+                    slug: generateResultSlug({slug: type.slug, year: year.name, session: session.slug}),
                     file: fileName,
-                    yearId: parseInt(data.yearId),
-                    sessionId: parseInt(data.sessionId),
-                    typeId: parseInt(data.typeId),
+                    yearId: data.yearId,
+                    sessionId: data.sessionId,
+                    typeId: data.typeId,
                 }
             })
         } else {
@@ -672,9 +677,10 @@ export async function createResult(data) {
             await prisma.result.create({
                 data: {
                     title: data.title,
+                    slug: generateResultSlug({slug: type.slug, year: year.name, session: session.slug}),
                     file: fileName,
-                    yearId: parseInt(data.yearId),
-                    typeId: parseInt(data.typeId),
+                    yearId: data.yearId,
+                    typeId: data.typeId,
                 }
             })
         }
@@ -686,8 +692,8 @@ export async function createResult(data) {
 
 }
 export async function createException(data) {
-    const validated = Validate.createException.safeParse({name: data.name, value: data.value, degree: data.degree, ref: data.ref, typeId: parseInt(data.typeId), yearId: parseInt(data.yearId), resultId: parseInt(data.resultId)})
-    const existingException = await getExceptionByName(data.name, parseInt(data.yearId))
+    const validated = Validate.createException.safeParse({name: data.name, value: data.value, degree: data.degree, ref: data.ref, typeId: data.typeId, yearId: data.yearId, resultId: data.resultId})
+    const existingException = await getExceptionByName(data.name, data.yearId)
     if(existingException) return sendResponseServer(false, 400, "الاستثناء موجود بالفعل.")
     if(validated.success){
         await prisma.exception.create({
@@ -696,9 +702,9 @@ export async function createException(data) {
                 value: data.value,
                 degree: data.degree,
                 ref: data.ref,
-                yearId: parseInt(data.yearId),
-                resultId: parseInt(data.resultId),
-                typeId: parseInt(data.typeId),
+                yearId: data.yearId,
+                resultId: data.resultId,
+                typeId: data.typeId,
             }
         })
         return sendResponseServer(true, 200, "تم إضافة الاستثناء بنجاح")
@@ -708,22 +714,22 @@ export async function createException(data) {
 
 }
 export async function updateException(id, data) {
-    const validated = Validate.updateException.safeParse({name: data.name, value: data.value, degree: data.degree, ref: data.ref, exceptionId: parseInt(id), typeId: parseInt(data.typeId), yearId: parseInt(data.yearId), resultId: parseInt(data.resultId)})
+    const validated = Validate.updateException.safeParse({name: data.name, value: data.value, degree: data.degree, ref: data.ref, exceptionId: id, typeId: data.typeId, yearId: data.yearId, resultId: data.resultId})
     const existingException = await getExceptionById(id)
-    if(existingException && existingException.id !== parseInt(id)) return sendResponseServer(false, 400, "الاستثناء موجود بالفعل.")
+    if(existingException && existingException.id !== id) return sendResponseServer(false, 400, "الاستثناء موجود بالفعل.")
     if(validated.success){
         await prisma.exception.update({
             where: {
-              id: parseInt(id)
+              id: id
             },
             data: {
                 name: data.name,
                 value: data.value,
                 degree: data.degree,
                 ref: data.ref,
-                yearId: parseInt(data.yearId),
-                resultId: parseInt(data.resultId),
-                typeId: parseInt(data.typeId),
+                yearId: data.yearId,
+                resultId: data.resultId,
+                typeId: data.typeId,
             }
         })
         return sendResponseServer(true, 200, "تم تحديث الاستثناء بنجاح")
@@ -735,7 +741,7 @@ export async function updateException(id, data) {
 export async function updateExceptionApplied(id, value) {
     await prisma.exception.update({
         where: {
-          id: parseInt(id)
+          id: id
         },
         data: {
             applied: value,
@@ -747,7 +753,7 @@ export async function updateExceptionApplied(id, value) {
 export async function updateResultPublished(id, value) {
     await prisma.result.update({
         where: {
-            id: parseInt(id)
+            id: id
         },
         data: {
             isPublished: value === "true",
@@ -759,7 +765,7 @@ export async function updateResultPublished(id, value) {
 export async function updateResultUploaded(id, value) {
     await prisma.result.update({
         where: {
-            id: parseInt(id)
+            id: id
         },
         data: {
             isUploaded: value === "true",
@@ -769,38 +775,47 @@ export async function updateResultUploaded(id, value) {
 
 }
 export async function updateResult(id, data) {
-    const validated = !data.isBac ? Validate.updateResult.safeParse({title: data.title, typeId: parseInt(data.typeId), yearId: parseInt(data.yearId)}) : Validate.updateResult.safeParse({title: data.title, typeId: parseInt(data.typeId), yearId: parseInt(data.yearId), sessionId: parseInt(data.sessionId)})
-    const existingResult = await getResultByTitle(data.title, parseInt(data.yearId))
-    if(existingResult && existingResult.id !== parseInt(id)) return sendResponseServer(false, 400, "النتيجة موجودة بالفعل.")
+    const validated = !data.isBac ? Validate.updateResult.safeParse({title: data.title, typeId: data.typeId, yearId: data.yearId}) : Validate.updateResult.safeParse({title: data.title, typeId: data.typeId, yearId: data.yearId, sessionId: data.sessionId})
+    const existingResult = await getResultByTitle(data.title, data.yearId)
+    if(existingResult && existingResult.id !== id) return sendResponseServer(false, 400, "النتيجة موجودة بالفعل.")
     if(validated.success){
+        const session = await prisma.session.findUnique({where: { id: data.sessionId }})
+        const year = await prisma.year.findUnique({where: { id: data.yearId }})
+        const type = (await prisma.result.findUnique({
+            where: { id },
+            select: {
+                type: true
+            }
+        }))?.type
         if(data.fileResult !== "undefined"){
             if(await isFileExist('results', data.file)){
                 await deleteFile('results', data.file)
             }
             if(data.isBac) {
-                const session = await prisma.session.findUnique({where: { id: parseInt(data.sessionId) }})
                 const fileName = await upload("results", data.fileResult, data.isBac, session.slug)
                 await prisma.result.update({
                     where: {
-                        id: parseInt(id)
+                        id,
                     },
                     data: {
                         title: generateResultTitle({title: data.title, session: session.name}),
+                        slug: generateResultSlug({slug: type.slug, year: year.name, session: session.slug}),
                         file: fileName,
-                        yearId: parseInt(data.yearId),
-                        sessionId: parseInt(data.sessionId),
+                        yearId: data.yearId,
+                        sessionId: data.sessionId,
                     }
                 })
             } else {
                 const fileName = await upload("results", data.fileResult)
                 await prisma.result.update({
                     where: {
-                        id: parseInt(id)
+                        id
                     },
                     data: {
                         title: data.title,
+                        slug: generateResultSlug({slug: type.slug, year: year.name, session: session.slug}),
                         file: fileName,
-                        yearId: parseInt(data.yearId)
+                        yearId: data.yearId
                     }
                 })
             }
@@ -809,12 +824,13 @@ export async function updateResult(id, data) {
         } else {
             await prisma.result.update({
                 where: {
-                    id: parseInt(id)
+                    id
                 },
                 data: {
                     title: !data.isBac ?  data.title : generateResultTitle({title: data.title, session: session.name}),
-                    yearId: parseInt(data.yearId),
-                    sessionId: !data.isBac ? null : parseInt(data.sessionId),
+                    slug: generateResultSlug({slug: type.slug, year: year.name, session: session.slug}),
+                    yearId: data.yearId,
+                    sessionId: !data.isBac ? null : data.sessionId,
                 }
             })
             return sendResponseServer(true, 200, "تم تحديث النتيجة بنجاح")
